@@ -1,5 +1,5 @@
 // Function Utilities
-var getDayString = function (day) {
+getDayString = function (day) {
   switch (day) {
     case 0:
       return "Sun";
@@ -19,7 +19,7 @@ var getDayString = function (day) {
       break;
   }
 };
-var getMonthString = function (month) {
+getMonthString = function (month) {
   switch (month) {
     case 0:
       return "January";
@@ -49,8 +49,26 @@ var getMonthString = function (month) {
       break;
   }
 };
-var getDayOfMonth = function (day, month, year) {
+getDayOfMonth = function (day, month, year) {
   return (d = new Date(year, month, day));
+};
+
+convertDatetimeToHuman = function (datetimeString) {
+  d = new Date(datetimeString);
+
+  day = d.getDate();
+  month = getMonthString(d.getMonth());
+  year = d.getFullYear();
+  hours = d.getHours();
+  minutes = d.getMinutes();
+
+  return (dateTime = {
+    day,
+    month,
+    year,
+    hours,
+    minutes,
+  });
 };
 
 // Functions
@@ -160,9 +178,26 @@ window.onload = function () {
 // Add new event
 
 function addEvent() {
-    console.log("addEvent clicked");
-//   calendar = document.getElementById("calendar-container");
-//   calendar.style.display = "none";
+  console.log("addEvent clicked");
+  window.buttonId = "addEvent";
+  document.querySelector("#modal-container").classList.add(buttonId);
+  // activate focus on modal - close when out of focus
+  // document.getElementById("modal-rectangle").focus();
+}
 
-  
+function closeModalEvent() {
+  document.getElementById("modal-container").classList.add("out");
+  setTimeout(function () {
+    document.getElementById("modal-container").classList.remove("out");
+    document.getElementById("modal-container").classList.remove(buttonId);
+  }, 200);
+}
+
+function selectDatetime(e, type) {
+  if (type == "start") {
+    window.startDatetime = convertDatetimeToHuman(e);
+  } else {
+    window.endDatetime = convertDatetimeToHuman(e);
+  }
+  console.log("selected dateTime: ", dateTime);
 }

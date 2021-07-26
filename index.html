@@ -14,11 +14,12 @@
       href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"
     />
     <link rel="stylesheet" href="./css/style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="./js/mainJs.js"></script>
   </head>
 
   <body>
-    <div class="main-container-wrapper">
+    <div class="main-container-wrapper content">
       <header>
         <button class="header__btn header__btn--left" title="Menu">
           <svg
@@ -31,7 +32,12 @@
             <path fill="#fff" d="M0 0h20v2H0zM0 7h20v2H0zM0 14h20v2H0z" />
           </svg>
         </button>
-        <button class="header__btn header__btn--right" title="Add event" onclick="addEvent()">
+        <button
+          id="addEvent"
+          class="header__btn header__btn--right"
+          title="Add event"
+          onclick="addEvent()"
+        >
           <svg
             class="icon"
             width="26px"
@@ -46,8 +52,36 @@
         </button>
       </header>
       <main>
+        <div id="modal-container">
+          <div class="modal-background">
+            <div class="modal">
+              <h2>New Event</h2>
+              <input id="event-name" type="text" placeholder="Event Name" />
+              <label for="start-datetime-picker">Enter a start date and time:</label>
+              <input
+                type="datetime-local"
+                name="start datetime-picker"
+                id="start-datetime-picker"
+                placeholder="Start Date"
+                onchange="selectDatetime(value, 'start')"
+              />
+              <label for="end-datetime-picker">Enter a end date and time:</label>
+              <input
+                type="datetime-local"
+                name="start datetime-picker"
+                id="start-datetime-picker"
+                placeholder="End Date"
+                onchange="selectDatetime(value, 'end')"
+              />
+              <div class="modal-buttons">
+                <button onclick="closeModalEvent()">Cancel</button>
+                <button>Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <div id="calendar-container" class="calendar-container" >
+        <div id="calendar-container" class="calendar-container">
           <div class="calendar-container__header">
             <button
               id="year-button-back"
@@ -121,43 +155,43 @@
                 -->
                 <!-- start extra upper row -->
                 <div class="calendar-table__row">
-                    <div id="d-6-props" class="calendar-table__col">
-                      <div class="calendar-table__item">
-                        <span id="d-6"></span>
-                      </div>
-                    </div>
-                    <div id="d-5-props" class="calendar-table__col">
-                      <div class="calendar-table__item">
-                        <span id="d-5"></span>
-                      </div>
-                    </div>
-                    <div id="d-4-props" class="calendar-table__col">
-                      <div class="calendar-table__item">
-                        <span id="d-4"></span>
-                      </div>
-                    </div>
-                    <div id="d-3-props" class="calendar-table__col">
-                      <div class="calendar-table__item">
-                        <span id="d-3"></span>
-                      </div>
-                    </div>
-                    <div id="d-2-props" class="calendar-table__col">
-                      <div class="calendar-table__item">
-                        <span id="d-2"></span>
-                      </div>
-                    </div>
-                    <div id="d-1-props" class="calendar-table__col">
-                      <div class="calendar-table__item">
-                        <span id="d-1"></span>
-                      </div>
-                    </div>
-                    <div id="d0-props" class="calendar-table__col">
-                      <div class="calendar-table__item">
-                        <span id="d0"></span>
-                      </div>
+                  <div id="d-6-props" class="calendar-table__col">
+                    <div class="calendar-table__item">
+                      <span id="d-6"></span>
                     </div>
                   </div>
-                  <!-- end extra upper row -->
+                  <div id="d-5-props" class="calendar-table__col">
+                    <div class="calendar-table__item">
+                      <span id="d-5"></span>
+                    </div>
+                  </div>
+                  <div id="d-4-props" class="calendar-table__col">
+                    <div class="calendar-table__item">
+                      <span id="d-4"></span>
+                    </div>
+                  </div>
+                  <div id="d-3-props" class="calendar-table__col">
+                    <div class="calendar-table__item">
+                      <span id="d-3"></span>
+                    </div>
+                  </div>
+                  <div id="d-2-props" class="calendar-table__col">
+                    <div class="calendar-table__item">
+                      <span id="d-2"></span>
+                    </div>
+                  </div>
+                  <div id="d-1-props" class="calendar-table__col">
+                    <div class="calendar-table__item">
+                      <span id="d-1"></span>
+                    </div>
+                  </div>
+                  <div id="d0-props" class="calendar-table__col">
+                    <div class="calendar-table__item">
+                      <span id="d0"></span>
+                    </div>
+                  </div>
+                </div>
+                <!-- end extra upper row -->
                 <div class="calendar-table__row">
                   <div id="d1-props" class="calendar-table__col">
                     <div class="calendar-table__item">
@@ -345,80 +379,80 @@
                 </div>
                 <!-- extra lower row -->
                 <div class="calendar-table__row">
-                    <div id="d36-props" class="calendar-table__col">
-                      <div class="calendar-table__item">
-                        <span id="d36"></span>
-                      </div>
-                    </div>
-                    <div id="d37-props" class="calendar-table__col">
-                      <div class="calendar-table__item">
-                        <span id="d37"></span>
-                      </div>
-                    </div>
-                    <div id="d38-props" class="calendar-table__col">
-                      <div class="calendar-table__item">
-                        <span id="d38"></span>
-                      </div>
-                    </div>
-                    <div id="d39-props" class="calendar-table__col">
-                      <div class="calendar-table__item">
-                        <span id="d39"></span>
-                      </div>
-                    </div>
-                    <div id="d40-props" class="calendar-table__col">
-                      <div class="calendar-table__item">
-                        <span id="d40"></span>
-                      </div>
-                    </div>
-                    <div id="d41-props" class="calendar-table__col">
-                      <div class="calendar-table__item">
-                        <span id="d41"></span>
-                      </div>
-                    </div>
-                    <div id="d42-props" class="calendar-table__col">
-                      <div class="calendar-table__item">
-                        <span id="d42"></span>
-                      </div>
+                  <div id="d36-props" class="calendar-table__col">
+                    <div class="calendar-table__item">
+                      <span id="d36"></span>
                     </div>
                   </div>
-                  <!-- end lower row -->
+                  <div id="d37-props" class="calendar-table__col">
+                    <div class="calendar-table__item">
+                      <span id="d37"></span>
+                    </div>
+                  </div>
+                  <div id="d38-props" class="calendar-table__col">
+                    <div class="calendar-table__item">
+                      <span id="d38"></span>
+                    </div>
+                  </div>
+                  <div id="d39-props" class="calendar-table__col">
+                    <div class="calendar-table__item">
+                      <span id="d39"></span>
+                    </div>
+                  </div>
+                  <div id="d40-props" class="calendar-table__col">
+                    <div class="calendar-table__item">
+                      <span id="d40"></span>
+                    </div>
+                  </div>
+                  <div id="d41-props" class="calendar-table__col">
+                    <div class="calendar-table__item">
+                      <span id="d41"></span>
+                    </div>
+                  </div>
+                  <div id="d42-props" class="calendar-table__col">
+                    <div class="calendar-table__item">
+                      <span id="d42"></span>
+                    </div>
+                  </div>
+                </div>
+                <!-- end lower row -->
               </div>
             </div>
           </div>
         </div>
 
         <div class="events-container">
-            <span class="events__title">Upcoming events this month</span>
-            <ul class="events__list">
-              <li class="events__item">
-                <div class="events__item--left">
-                  <span class="events__name">Town hall meeting</span>
-                  <span class="events__date">Oct 5</span>
-                </div>
-                <span class="events__tag">16:00 17:00</span>
-              </li>
-              <li class="events__item">
-                <div class="events__item--left">
-                  <span class="events__name">Meet with George</span>
-                  <span class="events__date">Oct 7</span>
-                </div>
-                <span class="events__tag">10:00</span>
-              </li>
-              <li class="events__item">
-                <div class="events__item--left">
-                  <span class="events__name">Vacation!!!</span>
-                  <span class="events__date">Oct 16 - Oct 18</span>
-                </div>
-                <span class="events__tag events__tag--highlighted">All day</span>
-              </li>
-              <li class="events__item">
-                <div class="events__item--left">
-                  <span class="events__name">Visit Grandma</span>
-                  <span class="events__date">Oct 27 - Oct 28</span>
-                </div>
-              </li>
-            </ul>
-          </div>
+          <span class="events__title">Upcoming events this month</span>
+          <ul class="events__list">
+            <li class="events__item">
+              <div class="events__item--left">
+                <span class="events__name">Town hall meeting</span>
+                <span class="events__date">Oct 5</span>
+              </div>
+              <span class="events__tag">16:00 17:00</span>
+            </li>
+            <li class="events__item">
+              <div class="events__item--left">
+                <span class="events__name">Meet with George</span>
+                <span class="events__date">Oct 7</span>
+              </div>
+              <span class="events__tag">10:00</span>
+            </li>
+            <li class="events__item">
+              <div class="events__item--left">
+                <span class="events__name">Vacation!!!</span>
+                <span class="events__date">Oct 16 - Oct 18</span>
+              </div>
+              <span class="events__tag events__tag--highlighted">All day</span>
+            </li>
+            <li class="events__item">
+              <div class="events__item--left">
+                <span class="events__name">Visit Grandma</span>
+                <span class="events__date">Oct 27 - Oct 28</span>
+              </div>
+            </li>
+          </ul>
+        </div>
 
         <!-- <div class="events-container">
           <span class="events__title">Upcoming events this month</span>
