@@ -127,7 +127,7 @@ header {
   border: 2px solid transparent;
   border-radius: 50%;
   color: #424588;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 700;
   width: 100%;
   height: 100%;
@@ -135,6 +135,8 @@ header {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  margin: 15px;
+  /* transform: scale(0.85); */
 }
 .calendar-table__item:hover {
   background: #f8fafa;
@@ -196,13 +198,28 @@ header {
   -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
 }
-.calendar-table__event .calendar-table__item {
-  background-color: #66dcec;
-  border-color: #fefefe;
+
+/* Colors: #2ecc70cc, #3498dbd2, #f1c40fdc, #e74d3ce3 */
+
+/* .calendar-table__event-color1 .calendar-table__item {
+  background-color: none;
+  -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0 1.5px #16d666, 0 0 0 2px #ffffff, 0 0 0 3.5px #50a8e2,
+    0 0 0 4px #ffffff, 0 0 0 5.5px #f7d23f, 0 0 0 6px #ffffff, 0 0 0 7.5px #e74d3c;
+} */
+
+.calendar-table__event-color1 .calendar-table__item {
+  background-color: none;
+  /* border: 2px solid #66dcec; */
+  border-top: 3px solid #2ecc70cc;
+  border-right: 3px solid #66dcec;
+  border-bottom: 3px solid #f1c40f;
+  border-left: 3px solid #e74d3ce3;
   -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
   -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-  color: #fff;
+  /* color: #fff; */
 }
 .calendar-table__event--long {
   overflow-x: hidden;
@@ -355,14 +372,19 @@ header {
   background: white;
   padding: 30px;
   display: inline-block;
-  border-radius: 3px;
+  border-radius: 10px;
   font-weight: 300;
   position: relative;
+  line-height: 25px;
+  margin-bottom: 25px;
 }
 #modal-container .modal-background .modal h2 {
   font-size: 25px;
-  line-height: 25px;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
+}
+
+#modal-container .modal-background .modal label {
+  font-size: 12px;
 }
 
 #modal-container .modal-background .modal input {
@@ -370,19 +392,40 @@ header {
   margin-bottom: 15px;
   display: block;
   width: 100%;
-  padding:10px;
+  padding: 10px;
+}
+
+#modal-container .modal-background .modal textarea {
+  font-size: 15px;
+  margin-bottom: 15px;
+  display: block;
+  width: 100%;
+  padding: 10px;
+}
+
+#modal-container .modal-background .modal .custom-radios p {
+  font-size: 12px;
+}
+
+#modal-container .modal-background .modal .modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
 }
 
 #modal-container .modal-background .modal button {
-  background:none;
+  background: none;
   border: none;
   font-size: 15px;
-  line-height: 25px;
-  display: inline-block;
-  margin: 20px;
-  margin-bottom: 0;
+  display: inline;
   padding: 5px;
+  color: #65aa9d;
 }
+
+#modal-container .modal-background .modal button ion-icon {
+  transform: translateY(1.5px);
+}
+
 #modal-container .modal-background .modal button:hover {
   color: #6685ec;
 }
@@ -685,4 +728,54 @@ header {
   100% {
     transform: scale(0);
   }
+}
+
+/* Category Radio Buttons */
+
+.custom-radios div {
+  display: inline-block;
+}
+.custom-radios input[type="radio"] {
+  display: none !important;
+}
+.custom-radios input[type="radio"] + label {
+  color: #333;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+.custom-radios input[type="radio"] + label span {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin: 5px 4px 0 0;
+  vertical-align: middle;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.33);
+  background-repeat: no-repeat;
+  background-position: center;
+  text-align: center;
+  line-height: 30px;
+}
+.custom-radios input[type="radio"] + label span img {
+  opacity: 0;
+  width: 50%;
+  height: auto;
+  transition: all 0.3s ease;
+}
+.custom-radios input[type="radio"]#color-1 + label span {
+  background-color: #2ecc71;
+}
+.custom-radios input[type="radio"]#color-2 + label span {
+  background-color: #3498db;
+}
+.custom-radios input[type="radio"]#color-3 + label span {
+  background-color: #f1c40f;
+}
+.custom-radios input[type="radio"]#color-4 + label span {
+  background-color: #e74c3c;
+}
+.custom-radios input[type="radio"]:checked + label span img {
+  opacity: 1;
 }

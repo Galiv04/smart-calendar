@@ -1,3 +1,28 @@
+// data for testing
+
+window.currentMonthEvents = [
+  {
+    name: "Call with Mario",
+    startDate: {
+      day: 20,
+      month: 6,
+      year: 2021,
+      hours: 15,
+      minutes: 22,
+    },
+    endDate: {
+      day: 20,
+      month: 6,
+      year: 2021,
+      hours: 16,
+      minutes: 52,
+    },
+    note: "ciao ciao",
+    color: 1,
+  },
+  {},
+];
+
 // Function Utilities
 getDayString = function (day) {
   switch (day) {
@@ -149,6 +174,14 @@ function refreshCalendar() {
       document.getElementById("d" + i + "-props").className =
         "calendar-table__col calendar-table__today";
     }
+
+    currentMonthEvents.forEach((event) => {
+      if (event.startDate != undefined && event.startDate.day == dateNumber) {
+        document
+          .getElementById("d" + i + "-props")
+          .classList.add("calendar-table__event-color" + event.color);
+      }
+    });
   }
 
   // Write days of next month
@@ -177,7 +210,11 @@ window.onload = function () {
 
 // Add new event
 
-function addEvent() {
+function updateEventData() {}
+
+function addEventData() {}
+
+function newEvent() {
   console.log("addEvent clicked");
   window.buttonId = "addEvent";
   document.querySelector("#modal-container").classList.add(buttonId);
