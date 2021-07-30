@@ -297,7 +297,7 @@ function addNewEvent() {
           .catch((error) => {
             console.error("Error adding new event: ", error);
             closeModalEvent();
-
+            refreshCalendar();
           });
       } else {
         docRef.set({
@@ -316,7 +316,16 @@ function addNewEvent() {
               color: newEvent.color,
             },
           ],
-        });
+        }).then(() => {
+            console.log("Successfully added event to db");
+            closeModalEvent();
+            refreshCalendar();
+          })
+          .catch((error) => {
+            console.error("Error adding new event: ", error);
+            closeModalEvent();
+            refreshCalendar();
+          });
       }
     });
   } else {
