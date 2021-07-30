@@ -80,22 +80,22 @@ getDayOfMonth = function (day, month, year) {
 convertDatetimeToHuman = function (datetimeString) {
   d = new Date(datetimeString);
 
-  day = d.getDate();
-  month = getMonthString(d.getMonth());
-  monthNumber = d.getMonth();
-  year = d.getFullYear();
-  hours = d.getHours();
-  minutes = d.getMinutes();
-  fbTimestampSeconds = d.getTime() / 1000; //seconds
+  // day = d.getDate();
+  // month = getMonthString(d.getMonth());
+  // monthNumber = d.getMonth();
+  // year = d.getFullYear();
+  // hours = d.getHours();
+  // minutes = d.getMinutes();
+  //fbTimestampSeconds = d.getTime() / 1000; //seconds
 
   return (dateTime = {
-    day,
-    month,
-    monthNumber,
-    year,
-    hours,
-    minutes,
-    fbTimestampSeconds,
+    day: d.getDate(),
+    month: getMonthString(d.getMonth()),
+    monthNumber: d.getMonth(),
+    year: d.getFullYear(),
+    hours: d.getHours(),
+    minutes: d.getMinutes(),
+    fbTimestampSeconds: d.getTime() / 1000,
   });
 };
 
