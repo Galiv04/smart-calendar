@@ -334,7 +334,7 @@ function newEventBtn() {
     name: undefined,
     startDate: undefined,
     endDate: undefined,
-    note: undefined,
+    note: "",
     color: "color-1",
   };
   console.log("New Event:", newEvent);
