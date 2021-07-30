@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Calendar</title>
+    <title>Calendard</title>
     <link
       href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700"
       rel="stylesheet"
@@ -15,6 +15,14 @@
     />
     <link rel="stylesheet" href="./css/style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-firestore.js"></script>
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-analytics.js"></script>
+
     <script src="./js/mainJs.js"></script>
     <script
       type="module"
@@ -44,7 +52,7 @@
           id="addEvent"
           class="header__btn header__btn--right"
           title="Add event"
-          onclick="newEvent()"
+          onclick="newEventBtn()"
         >
           <svg
             class="icon"
@@ -67,10 +75,15 @@
                 <button onclick="closeModalEvent()">
                   <ion-icon name="chevron-back-outline"></ion-icon> Back
                 </button>
-                <button>Save</button>
+                <button onclick="addNewEvent()">Save</button>
               </div>
               <h2>Create Event</h2>
-              <input id="event-name" type="text" placeholder="Event Name" />
+              <input
+                id="event-name"
+                type="text"
+                placeholder="Event Name"
+                onchange="setNewEventName(value);"
+              />
               <label for="start-datetime-picker"
                 >Enter a start date and time:</label
               >
@@ -79,7 +92,7 @@
                 name="start datetime-picker"
                 id="start-datetime-picker"
                 placeholder="Start Date"
-                onchange="selectDatetime(value, 'start')"
+                onchange="selectNewEventDatetime(value, 'start')"
               />
               <label for="end-datetime-picker"
                 >Enter a end date and time:</label
@@ -89,7 +102,7 @@
                 name="start datetime-picker"
                 id="start-datetime-picker"
                 placeholder="End Date"
-                onchange="selectDatetime(value, 'end')"
+                onchange="selectNewEventDatetime(value, 'end')"
               />
               <textarea
                 placeholder="Add notes for the event..."
@@ -97,6 +110,7 @@
                 id="event-note"
                 cols="30"
                 rows="5"
+                onchange="setNewEventNote(value)"
               ></textarea>
 
               <div class="custom-radios">
@@ -108,6 +122,7 @@
                     name="color"
                     value="color-1"
                     checked
+                    onchange="setNewEventCategory(value, 'color-1')"
                   />
                   <label for="color-1">
                     <span>
@@ -125,6 +140,7 @@
                     id="color-2"
                     name="color"
                     value="color-2"
+                    onchange="setNewEventCategory(value, 'color-2')"
                   />
                   <label for="color-2">
                     <span>
@@ -142,6 +158,7 @@
                     id="color-3"
                     name="color"
                     value="color-3"
+                    onchange="setNewEventCategory(value, 'color-3')"
                   />
                   <label for="color-3">
                     <span>
@@ -159,6 +176,7 @@
                     id="color-4"
                     name="color"
                     value="color-4"
+                    onchange="setNewEventCategory(value, 'color-4')"
                   />
                   <label for="color-4">
                     <span>

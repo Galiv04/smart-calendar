@@ -1,27 +1,26 @@
-// data for testing
+// testing
+user = "galiv04@gmail.com";
 
-window.currentMonthEvents = [
-  {
-    name: "Call with Mario",
-    startDate: {
-      day: 20,
-      month: 6,
-      year: 2021,
-      hours: 15,
-      minutes: 22,
-    },
-    endDate: {
-      day: 20,
-      month: 6,
-      year: 2021,
-      hours: 16,
-      minutes: 52,
-    },
-    note: "ciao ciao",
-    color: 1,
-  },
-  {},
-];
+// Firebase
+
+var firebaseConfig = {
+  apiKey: "AIzaSyB8zIm4HC6LeLgLbU5qlYgNNe0aEPHes8Y",
+  authDomain: "calen-dard.firebaseapp.com",
+  projectId: "calen-dard",
+  storageBucket: "calen-dard.appspot.com",
+  messagingSenderId: "555896146781",
+  appId: "1:555896146781:web:9aa4f28c385a9b13c436b4",
+  measurementId: "G-S99YQ4L3CQ",
+};
+// Initialize Firebase
+fb = firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+
+db = firebase.firestore();
+
+// data init
+
+window.currentMonthEvents = [];
 
 // Function Utilities
 getDayString = function (day) {
@@ -83,31 +82,32 @@ convertDatetimeToHuman = function (datetimeString) {
 
   day = d.getDate();
   month = getMonthString(d.getMonth());
+  monthNumber = d.getMonth();
   year = d.getFullYear();
   hours = d.getHours();
   minutes = d.getMinutes();
+  fbTimestampSeconds = d.getTime() / 1000; //seconds
 
   return (dateTime = {
     day,
     month,
+    monthNumber,
     year,
     hours,
     minutes,
+    fbTimestampSeconds,
   });
 };
 
 // Functions
-
 function prevYear() {
   year = year - 1;
   refreshCalendar();
 }
-
 function nextYear() {
   year = year + 1;
   refreshCalendar();
 }
-
 function prevMonth() {
   month = month - 1;
   if (month == -1) {
@@ -116,7 +116,6 @@ function prevMonth() {
   }
   refreshCalendar();
 }
-
 function nextMonth() {
   month = month + 1;
   if (month == 12) {
@@ -125,25 +124,7 @@ function nextMonth() {
   }
   refreshCalendar();
 }
-
-function refreshCalendar() {
-  window.monthString = getMonthString(month);
-
-  window.titleYear = document.getElementById("title-year");
-  titleYear.innerHTML = year;
-
-  window.titleMonth = document.getElementById("title-month");
-  titleMonth.innerHTML = monthString;
-
-  window.firstDayOfCurrentMonth = getDayOfMonth(1, month, year);
-  window.firstDayOfCurrentMonthNumber = firstDayOfCurrentMonth.getDay(); //0-6
-
-  window.lastDayOfPreviousMonth = getDayOfMonth(0, month, year);
-  window.lastDayOfPreviousMonthDate = lastDayOfPreviousMonth.getDate(); //1-31
-
-  window.lastDayOfCurrentMonth = getDayOfMonth(0, month + 1, year);
-  window.lastDayOfCurrentMonthDate = lastDayOfCurrentMonth.getDate(); //1-31
-
+function writeCalendar() {
   // Write days of previous month
   for (let i = firstDayOfCurrentMonthNumber - 1; i > -7; i--) {
     dateNumber =
@@ -175,11 +156,13 @@ function refreshCalendar() {
         "calendar-table__col calendar-table__today";
     }
 
-    currentMonthEvents.forEach((event) => {
-      if (event.startDate != undefined && event.startDate.day == dateNumber) {
-        document
-          .getElementById("d" + i + "-props")
-          .classList.add("calendar-table__event-color" + event.color);
+    currentMonthEvents.forEach((e) => {
+      if (e.day == dateNumber) {
+        e.events.forEach((event) => {
+          document
+            .getElementById("d" + i + "-props")
+            .classList.add("calendar-table__event-" + event.color);
+        });
       }
     });
   }
@@ -197,6 +180,60 @@ function refreshCalendar() {
       "calendar-table__col calendar-table__inactive";
   }
 }
+function refreshCalendar() {
+  // Define useful variables
+  window.monthString = getMonthString(month);
+
+  window.titleYear = document.getElementById("title-year");
+  titleYear.innerHTML = year;
+
+  window.titleMonth = document.getElementById("title-month");
+  titleMonth.innerHTML = monthString;
+
+  window.firstDayOfCurrentMonth = getDayOfMonth(1, month, year);
+  window.firstDayOfCurrentMonthNumber = firstDayOfCurrentMonth.getDay(); //0-6
+
+  window.lastDayOfPreviousMonth = getDayOfMonth(0, month, year);
+  window.lastDayOfPreviousMonthDate = lastDayOfPreviousMonth.getDate(); //1-31
+
+  window.lastDayOfCurrentMonth = getDayOfMonth(0, month + 1, year);
+  window.lastDayOfCurrentMonthDate = lastDayOfCurrentMonth.getDate(); //1-31
+
+  // get data from firestore
+
+  ref = db
+    .collection("usersEvents")
+    .doc(user)
+    .collection("years")
+    .doc(year.toString())
+    .collection("months")
+    .doc(monthString.toLowerCase())
+    .collection("days");
+
+  ref
+    .get()
+    .then((querySnapshot) => {
+      // console.log(querySnapshot.docs.length);
+      if (querySnapshot.docs.length != 0) {
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          // console.log(doc.id, " => ", doc.data());
+          data = doc.data();
+          element = { day: doc.id, ...data };
+          currentMonthEvents.push(element);
+        });
+      } else {
+        currentMonthEvents = [];
+      }
+      console.log("Current Month Events:", currentMonthEvents);
+      writeCalendar();
+    })
+    .catch((error) => {
+      console.log("Error getting documents: ", error);
+      currentMonthEvents = [];
+      writeCalendar();
+    });
+}
 
 // Run On Page Load
 window.onload = function () {
@@ -209,17 +246,98 @@ window.onload = function () {
 };
 
 // Add new event
-
 function updateEventData() {}
 
-function addEventData() {}
+function addNewEvent() {
+  // check variables
+  if (
+    newEvent.name &&
+    newEvent.startDate &&
+    newEvent.endDate /*add better check */
+  ) {
+    docRef = db
+      .collection("usersEvents")
+      .doc(user)
+      .collection("years")
+      .doc(newEvent.startDate.year.toString()) //year
+      .collection("months")
+      .doc(newEvent.startDate.month.toLowerCase()) //monthString
+      .collection("days")
+      .doc(newEvent.startDate.day.toString());
 
-function newEvent() {
+    docRef.get().then((doc) => {
+      console.log(doc.exists);
+      if (doc.exists) {
+        thisEvent = {
+          name: newEvent.name,
+          startDate: new firebase.firestore.Timestamp(
+            newEvent.startDate.fbTimestampSeconds,
+            0
+          ),
+          endDate: new firebase.firestore.Timestamp(
+            newEvent.endDate.fbTimestampSeconds,
+            0
+          ),
+          note: newEvent.note,
+          color: newEvent.color,
+        };
+        data = doc.data();
+        events = data.events; //current events
+        events.push(thisEvent); //updated events
+
+        docRef
+          .set({
+            events: events,
+          })
+          .then(() => {
+            console.log("Successfully added event to db");
+            closeModalEvent();
+            refreshCalendar();
+          })
+          .catch((error) => {
+            console.error("Error adding new event: ", error);
+            closeModalEvent();
+
+          });
+      } else {
+        docRef.set({
+          events: [
+            {
+              name: newEvent.name,
+              startDate: new firebase.firestore.Timestamp(
+                newEvent.startDate.fbTimestampSeconds,
+                0
+              ),
+              endDate: new firebase.firestore.Timestamp(
+                newEvent.endDate.fbTimestampSeconds,
+                0
+              ),
+              note: newEvent.note,
+              color: newEvent.color,
+            },
+          ],
+        });
+      }
+    });
+  } else {
+    return;
+  }
+}
+
+function newEventBtn() {
   console.log("addEvent clicked");
   window.buttonId = "addEvent";
   document.querySelector("#modal-container").classList.add(buttonId);
-  // activate focus on modal - close when out of focus
-  // document.getElementById("modal-rectangle").focus();
+
+  // Standard parameters needed for New Event Creation
+  window.newEvent = {
+    name: undefined,
+    startDate: undefined,
+    endDate: undefined,
+    note: undefined,
+    color: "color-1",
+  };
+  console.log("New Event:", newEvent);
 }
 
 function closeModalEvent() {
@@ -227,14 +345,30 @@ function closeModalEvent() {
   setTimeout(function () {
     document.getElementById("modal-container").classList.remove("out");
     document.getElementById("modal-container").classList.remove(buttonId);
+    console.log("modal closed");
   }, 200);
 }
 
-function selectDatetime(e, type) {
+function setNewEventName(e) {
+  newEvent.name = e;
+  console.log("New Event:", newEvent);
+}
+
+function selectNewEventDatetime(e, type) {
   if (type == "start") {
-    window.startDatetime = convertDatetimeToHuman(e);
+    newEvent.startDate = convertDatetimeToHuman(e);
   } else {
-    window.endDatetime = convertDatetimeToHuman(e);
+    newEvent.endDate = convertDatetimeToHuman(e);
   }
-  console.log("selected dateTime: ", dateTime);
+  console.log("New Event:", newEvent);
+}
+
+function setNewEventNote(e) {
+  newEvent.note = e;
+  console.log("New Event:", newEvent);
+}
+
+function setNewEventCategory(e) {
+  newEvent.color = e;
+  console.log("New Event:", newEvent);
 }
