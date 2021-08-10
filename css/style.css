@@ -461,6 +461,117 @@ header {
   color: #6685ec;
 }
 
+#day-events-modal-container {
+  position: fixed;
+  display: table;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  transform: scale(0);
+  z-index: 1;
+  -webkit-font-smoothing: antialiased;
+  font-family: "Montserrat", sans-serif !important;
+  text-rendering: optimizeLegibility;
+  background: #fcfcfc00;
+}
+
+#day-events-modal-container.showEvents {
+  z-index: 0;
+  transform: scale(1);
+}
+#day-events-modal-container.showEvents .modal-background {
+  background: rgba(0, 0, 0, 0.7);
+}
+#day-events-modal-container.showEvents .modal-background .modal {
+  animation: blowUpModal 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+#day-events-modal-container.showEvents + .content {
+  z-index: 1;
+  animation: blowUpContent 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+#day-events-modal-container.showEvents.out .modal-background .modal {
+  animation: blowUpModalTwo 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+#day-events-modal-container.showEvents.out + .content {
+  animation: blowUpContentTwo 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+#day-events-modal-container .modal-background {
+  display: table-cell;
+  background: rgba(0, 0, 0, 0.8);
+  text-align: center;
+  vertical-align: middle;
+}
+#day-events-modal-container .modal-background .modal {
+  background: white;
+  padding: 30px;
+  display: inline-block;
+  border-radius: 10px;
+  font-weight: 300;
+  position: relative;
+  line-height: 25px;
+  margin-bottom: 25px;
+}
+#day-events-modal-container .modal-background .modal h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  font-weight: 100;
+}
+
+#day-events-modal-container .modal-background .modal label {
+  font-size: 12px;
+}
+
+#day-events-modal-container .modal-background .modal input {
+  font-size: 15px;
+  margin-bottom: 15px;
+  display: block;
+  width: 100%;
+  width: -moz-available; /* WebKit-based browsers will ignore this. */
+  width: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
+  width: fill-available;
+  padding: 10px;
+}
+
+#day-events-modal-container .modal-background .modal textarea {
+  font-size: 15px;
+  margin-bottom: 15px;
+  display: block;
+  width: 100%;
+  width: -moz-available; /* WebKit-based browsers will ignore this. */
+  width: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
+  width: fill-available;
+  padding: 10px;
+}
+
+#day-events-modal-container .modal-background .modal .custom-radios p {
+  font-size: 12px;
+}
+
+#day-events-modal-container .modal-background .modal .modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+#day-events-modal-container .modal-background .modal button {
+  background: none;
+  border: none;
+  font-size: 15px;
+  display: inline;
+  padding: 5px;
+  color: #65aa9d;
+}
+
+#day-events-modal-container .modal-background .modal button ion-icon {
+  transform: translateY(1.5px);
+}
+
+#day-events-modal-container .modal-background .modal button:hover {
+  color: #6685ec;
+}
+
 @keyframes unfoldIn {
   0% {
     transform: scaleY(0.005) scaleX(0);

@@ -68,129 +68,181 @@
         </button>
       </header>
       <main>
-        <div id="modal-container">
-          <div class="modal-background">
-            <div class="modal">
-              <div class="modal-buttons">
-                <button onclick="closeModalEvent()">
-                  <ion-icon name="chevron-back-outline"></ion-icon> Back
-                </button>
-                <button onclick="addNewEvent()">Save</button>
-              </div>
-              <h2>Create Event</h2>
-              <input
-                id="event-name"
-                type="text"
-                placeholder="Event Name"
-                onchange="setNewEventName(value);"
-              />
-              <label for="start-datetime-picker"
-                >Enter a start date and time:</label
-              >
-              <input
-                type="datetime-local"
-                name="start datetime-picker"
-                id="start-datetime-picker"
-                placeholder="Start Date"
-                onchange="selectNewEventDatetime(value, 'start')"
-              />
-              <label for="end-datetime-picker"
-                >Enter a end date and time:</label
-              >
-              <input
-                type="datetime-local"
-                name="start datetime-picker"
-                id="start-datetime-picker"
-                placeholder="End Date"
-                onchange="selectNewEventDatetime(value, 'end')"
-              />
-              <textarea
-                placeholder="Add notes for the event..."
-                name="event-note"
-                id="event-note"
-                cols="30"
-                rows="5"
-                onchange="setNewEventNote(value)"
-              ></textarea>
-
-              <div class="custom-radios">
-                <p>Category:</p>
-                <div>
-                  <input
-                    type="radio"
-                    id="color-1"
-                    name="color"
-                    value="color-1"
-                    checked
-                    onchange="setNewEventCategory(value, 'color-1')"
-                  />
-                  <label for="color-1">
-                    <span>
-                      <img
-                        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg"
-                        alt="Checked Icon"
-                      />
-                    </span>
-                  </label>
+        <!-- <script src="./js/customTags.js"></script> -->
+        <create-new-event-modal>
+          <div id="modal-container">
+            <div class="modal-background">
+              <div class="modal">
+                <div class="modal-buttons">
+                  <button onclick="closeModalEvent()">
+                    <ion-icon name="chevron-back-outline"></ion-icon> Back
+                  </button>
+                  <button onclick="addNewEvent()">Save</button>
                 </div>
+                <h2>Create Event</h2>
+                <input
+                  id="event-name"
+                  type="text"
+                  placeholder="Event Name"
+                  onchange="setNewEventName(value);"
+                />
+                <label for="start-datetime-picker"
+                  >Enter a start date and time:</label
+                >
+                <input
+                  type="datetime-local"
+                  name="start datetime-picker"
+                  id="start-datetime-picker"
+                  placeholder="Start Date"
+                  onchange="selectNewEventDatetime(value, 'start')"
+                />
+                <label for="end-datetime-picker"
+                  >Enter a end date and time:</label
+                >
+                <input
+                  type="datetime-local"
+                  name="start datetime-picker"
+                  id="start-datetime-picker"
+                  placeholder="End Date"
+                  onchange="selectNewEventDatetime(value, 'end')"
+                />
+                <textarea
+                  placeholder="Add notes for the event..."
+                  name="event-note"
+                  id="event-note"
+                  cols="30"
+                  rows="5"
+                  onchange="setNewEventNote(value)"
+                ></textarea>
 
-                <div>
-                  <input
-                    type="radio"
-                    id="color-2"
-                    name="color"
-                    value="color-2"
-                    onchange="setNewEventCategory(value, 'color-2')"
-                  />
-                  <label for="color-2">
-                    <span>
-                      <img
-                        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg"
-                        alt="Checked Icon"
-                      />
-                    </span>
-                  </label>
-                </div>
+                <div class="custom-radios">
+                  <p>Category:</p>
+                  <div>
+                    <input
+                      type="radio"
+                      id="color-1"
+                      name="color"
+                      value="color-1"
+                      checked
+                      onchange="setNewEventCategory(value, 'color-1')"
+                    />
+                    <label for="color-1">
+                      <span>
+                        <img
+                          src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg"
+                          alt="Checked Icon"
+                        />
+                      </span>
+                    </label>
+                  </div>
 
-                <div>
-                  <input
-                    type="radio"
-                    id="color-3"
-                    name="color"
-                    value="color-3"
-                    onchange="setNewEventCategory(value, 'color-3')"
-                  />
-                  <label for="color-3">
-                    <span>
-                      <img
-                        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg"
-                        alt="Checked Icon"
-                      />
-                    </span>
-                  </label>
-                </div>
+                  <div>
+                    <input
+                      type="radio"
+                      id="color-2"
+                      name="color"
+                      value="color-2"
+                      onchange="setNewEventCategory(value, 'color-2')"
+                    />
+                    <label for="color-2">
+                      <span>
+                        <img
+                          src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg"
+                          alt="Checked Icon"
+                        />
+                      </span>
+                    </label>
+                  </div>
 
-                <div>
-                  <input
-                    type="radio"
-                    id="color-4"
-                    name="color"
-                    value="color-4"
-                    onchange="setNewEventCategory(value, 'color-4')"
-                  />
-                  <label for="color-4">
-                    <span>
-                      <img
-                        src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg"
-                        alt="Checked Icon"
-                      />
-                    </span>
-                  </label>
+                  <div>
+                    <input
+                      type="radio"
+                      id="color-3"
+                      name="color"
+                      value="color-3"
+                      onchange="setNewEventCategory(value, 'color-3')"
+                    />
+                    <label for="color-3">
+                      <span>
+                        <img
+                          src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg"
+                          alt="Checked Icon"
+                        />
+                      </span>
+                    </label>
+                  </div>
+
+                  <div>
+                    <input
+                      type="radio"
+                      id="color-4"
+                      name="color"
+                      value="color-4"
+                      onchange="setNewEventCategory(value, 'color-4')"
+                    />
+                    <label for="color-4">
+                      <span>
+                        <img
+                          src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg"
+                          alt="Checked Icon"
+                        />
+                      </span>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </create-new-event-modal>
+
+        <day-events-modal>
+          <div id="day-events-modal-container">
+            <div class="modal-background">
+              <div class="modal">
+                <div class="modal-buttons">
+                  <button onclick="closeDayEventsModal()">
+                    <ion-icon name="chevron-back-outline"></ion-icon> Back
+                  </button>
+                  <button onclick="">Save</button>
+                </div>
+
+                <div class="events-container">
+                  <span id="day-events-modal-title" class="events__title"></span>
+                  <ul id = "day-events-list" class="events__list">
+                    <!-- <li class="events__item">
+                      <div class="events__item--left">
+                        <span class="events__name">Town hall meeting</span>
+                        <span class="events__date">Oct 5</span>
+                      </div>
+                      <span class="events__tag">16:00 17:00</span>
+                    </li>
+                    <li class="events__item">
+                      <div class="events__item--left">
+                        <span class="events__name">Meet with George</span>
+                        <span class="events__date">Oct 7</span>
+                      </div>
+                      <span class="events__tag">10:00</span>
+                    </li>
+                    <li class="events__item">
+                      <div class="events__item--left">
+                        <span class="events__name">Vacation!!!</span>
+                        <span class="events__date">Oct 16 - Oct 18</span>
+                      </div>
+                      <span class="events__tag events__tag--highlighted">All day</span>
+                    </li>
+                    <li class="events__item">
+                      <div class="events__item--left">
+                        <span class="events__name">Visit Grandma</span>
+                        <span class="events__date">Oct 27 - Oct 28</span>
+                      </div>
+                    </li> -->
+                  </ul>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </day-events-modal>
 
         <div id="calendar-container" class="calendar-container">
           <div class="calendar-container__header">

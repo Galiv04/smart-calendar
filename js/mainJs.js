@@ -23,6 +23,10 @@ db = firebase.firestore();
 window.currentMonthEvents = [];
 
 // Function Utilities
+
+clearVariables = function () {
+  currentMonthEvents = [];
+};
 getDayString = function (day) {
   switch (day) {
     case 0:
@@ -159,9 +163,16 @@ function writeCalendar() {
     currentMonthEvents.forEach((e) => {
       if (e.day == dateNumber) {
         e.events.forEach((event) => {
-          document
-            .getElementById("d" + i + "-props")
-            .classList.add("calendar-table__event-" + event.color);
+          dayId = "d" + i;
+          el = document.getElementById(dayId + "-props");
+          // add event color
+          el.classList.add("calendar-table__event-" + event.color);
+          // add listener for modal with day events
+          el.addEventListener("click", (e, el) => {
+            showDayEventsBtn(i);
+          });
+
+          console.log(event);
         });
       }
     });
@@ -233,6 +244,7 @@ function refreshCalendar() {
       currentMonthEvents = [];
       writeCalendar();
     });
+  clearVariables();
 }
 
 // Run On Page Load
@@ -300,23 +312,25 @@ function addNewEvent() {
             refreshCalendar();
           });
       } else {
-        docRef.set({
-          events: [
-            {
-              name: newEvent.name,
-              startDate: new firebase.firestore.Timestamp(
-                newEvent.startDate.fbTimestampSeconds,
-                0
-              ),
-              endDate: new firebase.firestore.Timestamp(
-                newEvent.endDate.fbTimestampSeconds,
-                0
-              ),
-              note: newEvent.note,
-              color: newEvent.color,
-            },
-          ],
-        }).then(() => {
+        docRef
+          .set({
+            events: [
+              {
+                name: newEvent.name,
+                startDate: new firebase.firestore.Timestamp(
+                  newEvent.startDate.fbTimestampSeconds,
+                  0
+                ),
+                endDate: new firebase.firestore.Timestamp(
+                  newEvent.endDate.fbTimestampSeconds,
+                  0
+                ),
+                note: newEvent.note,
+                color: newEvent.color,
+              },
+            ],
+          })
+          .then(() => {
             console.log("Successfully added event to db");
             closeModalEvent();
             refreshCalendar();
@@ -343,7 +357,7 @@ function newEventBtn() {
     name: undefined,
     startDate: undefined,
     endDate: undefined,
-    note: "",
+    note: " ",
     color: "color-1",
   };
   console.log("New Event:", newEvent);
@@ -380,4 +394,79 @@ function setNewEventNote(e) {
 function setNewEventCategory(e) {
   newEvent.color = e;
   console.log("New Event:", newEvent);
+}
+
+// show and edit day events modal
+function showDayEventsBtn(i) {
+  dayId = "d" + i;
+  console.log("show day " + dayId + " event clicked");
+  window.buttonId = "showEvents";
+  document.querySelector("#day-events-modal-container").classList.add(buttonId);
+
+  // fill modal information
+  dayEventsModalTitle = document.getElementById("day-events-modal-title");
+  selectedDayNumber = document.getElementById(dayId).innerText;
+  console.log(dayId);
+  dayEventsModalTitle.innerHTML =
+    selectedDayNumber + " " + monthString + " " + year;
+
+  // list of events shown in the modal
+  list = document.getElementById("day-events-list");
+  list.innerHTML = "";
+
+  currentMonthEvents.forEach((e) => {
+    console.log(e);
+    if (e.day == selectedDayNumber) {
+      e.events.forEach((event) => {
+        startHours = event.startDate
+          .toDate()
+          .getHours()
+          .toLocaleString("en-US", {
+            minimumIntegerDigits: 2,
+            useGrouping: false,
+          });
+        endHours = event.endDate.toDate().getHours().toLocaleString("en-US", {
+          minimumIntegerDigits: 2,
+          useGrouping: false,
+        });
+        startMinutes = event.startDate
+          .toDate()
+          .getMinutes()
+          .toLocaleString("en-US", {
+            minimumIntegerDigits: 2,
+            useGrouping: false,
+          });
+        endMinutes = event.endDate
+          .toDate()
+          .getMinutes()
+          .toLocaleString("en-US", {
+            minimumIntegerDigits: 2,
+            useGrouping: false,
+          });
+
+        // update list
+        list.innerHTML =
+          list.innerHTML +
+          `<li class="events__item">
+          <div class="events__item--left">
+            <span class="events__name">${event.name}</span>
+            <span class="events__date">${event.note}</span>
+          </div>
+          <span class="events__tag">${startHours}:${startMinutes}  ${endHours}:${endMinutes}</span>
+        </li>`;
+      });
+    }
+  });
+}
+function closeDayEventsModal() {
+  document.getElementById("day-events-modal-container").classList.add("out");
+  setTimeout(function () {
+    document
+      .getElementById("day-events-modal-container")
+      .classList.remove("out");
+    document
+      .getElementById("day-events-modal-container")
+      .classList.remove(buttonId);
+    console.log("modal closed");
+  }, 200);
 }
