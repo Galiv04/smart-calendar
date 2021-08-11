@@ -26,6 +26,17 @@ window.currentMonthEvents = [];
 
 clearVariables = function () {
   currentMonthEvents = [];
+
+  // newEvent and modal inputs
+  eventNameInput = document.getElementById("event-name");
+  eventNameInput.value = null;
+  startDatetimePickerInput = document.getElementById("start-datetime-picker");
+  startDatetimePickerInput.value = null;
+  endDatetimePickerInput = document.getElementById("end-datetime-picker");
+  endDatetimePickerInput.value = null;
+  eventNoteInput = document.getElementById("event-note");
+  eventNoteInput.value = " ";
+  newEvent = {};
 };
 getDayString = function (day) {
   switch (day) {
