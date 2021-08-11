@@ -349,8 +349,7 @@ function addNewEvent() {
 
 function newEventBtn() {
   console.log("addEvent clicked");
-  window.buttonId = "addEvent";
-  document.querySelector("#modal-container").classList.add(buttonId);
+  document.querySelector("#modal-container").classList.add("addEvent");
 
   // Standard parameters needed for New Event Creation
   window.newEvent = {
@@ -367,7 +366,7 @@ function closeModalEvent() {
   document.getElementById("modal-container").classList.add("out");
   setTimeout(function () {
     document.getElementById("modal-container").classList.remove("out");
-    document.getElementById("modal-container").classList.remove(buttonId);
+    document.getElementById("modal-container").classList.remove("addEvent");
     console.log("modal closed");
   }, 200);
 }
@@ -396,12 +395,53 @@ function setNewEventCategory(e) {
   console.log("New Event:", newEvent);
 }
 
+// removeListEvents
+function removeListEvents(day, month, year, event) {
+  // find index of element to remove
+  for (let i = 0; i < currentMonthEvents.length; i++) {
+    if (currentMonthEvents[i].day == day) {
+      indexToRemove = currentMonthEvents[i].events.indexOf(event);
+      console.log(indexToRemove);
+      updatedEvents = currentMonthEvents[i].events;
+      updatedEvents.splice(indexToRemove, 1);
+      console.log(updatedEvents);
+
+      docRef = db
+        .collection("usersEvents")
+        .doc(user)
+        .collection("years")
+        .doc(year.toString()) //year
+        .collection("months")
+        .doc(month.toLowerCase()) //monthString
+        .collection("days")
+        .doc(day.toString());
+
+      //remove event
+      docRef
+        .set({
+          events: updatedEvents,
+        })
+        .then(() => {
+          console.log("Successfully removed event from db");
+          closeDayEventsModal();
+          refreshCalendar();
+        })
+        .catch((error) => {
+          console.error("Error removing event: ", error);
+          closeDayEventsModal();
+          refreshCalendar();
+        });
+    }
+  }
+}
+
 // show and edit day events modal
 function showDayEventsBtn(i) {
   dayId = "d" + i;
   console.log("show day " + dayId + " event clicked");
-  window.buttonId = "showEvents";
-  document.querySelector("#day-events-modal-container").classList.add(buttonId);
+  document
+    .querySelector("#day-events-modal-container")
+    .classList.add("showEvents");
 
   // fill modal information
   dayEventsModalTitle = document.getElementById("day-events-modal-title");
@@ -415,41 +455,51 @@ function showDayEventsBtn(i) {
   list.innerHTML = "";
 
   currentMonthEvents.forEach((e) => {
-    console.log(e);
+    // console.log(e);
     if (e.day == selectedDayNumber) {
       e.events.forEach((event) => {
-        startHours = event.startDate
-          .toDate()
-          .getHours()
-          .toLocaleString("en-US", {
-            minimumIntegerDigits: 2,
-            useGrouping: false,
-          });
-        endHours = event.endDate.toDate().getHours().toLocaleString("en-US", {
+        //data processing
+        humanStartDate = convertDatetimeToHuman(
+          event.startDate.toDate().toString()
+        );
+        humanEndDate = convertDatetimeToHuman(
+          event.endDate.toDate().toString()
+        );
+
+        startHours = humanStartDate.hours.toLocaleString("en-US", {
           minimumIntegerDigits: 2,
           useGrouping: false,
         });
-        startMinutes = event.startDate
-          .toDate()
-          .getMinutes()
-          .toLocaleString("en-US", {
-            minimumIntegerDigits: 2,
-            useGrouping: false,
-          });
-        endMinutes = event.endDate
-          .toDate()
-          .getMinutes()
-          .toLocaleString("en-US", {
-            minimumIntegerDigits: 2,
-            useGrouping: false,
-          });
+        endHours = humanEndDate.hours.toLocaleString("en-US", {
+          minimumIntegerDigits: 2,
+          useGrouping: false,
+        });
+        startMinutes = humanStartDate.minutes.toLocaleString("en-US", {
+          minimumIntegerDigits: 2,
+          useGrouping: false,
+        });
+        endMinutes = humanEndDate.minutes.toLocaleString("en-US", {
+          minimumIntegerDigits: 2,
+          useGrouping: false,
+        });
 
         // update list
         list.innerHTML =
           list.innerHTML +
-          `<li class="events__item">
+          `<button onclick="removeListEvents(humanStartDate.day, humanStartDate.month, humanStartDate.year, event )" style="transform: translate(-15px,-10px) scale(1.5); float: right;" > <ion-icon name="close-circle"></ion-icon> </button>
+          <li class="events__item-${event.color}">
           <div class="events__item--left">
             <span class="events__name">${event.name}</span>
+            <span class="events__date">${
+              humanStartDate.month.slice(0, 3) +
+              " " +
+              humanStartDate.day +
+              "  to  " +
+              humanEndDate.month.slice(0, 3) +
+              " " +
+              humanEndDate.day
+            }</span>
+            <br/>
             <span class="events__date">${event.note}</span>
           </div>
           <span class="events__tag">${startHours}:${startMinutes}  ${endHours}:${endMinutes}</span>
@@ -466,7 +516,7 @@ function closeDayEventsModal() {
       .classList.remove("out");
     document
       .getElementById("day-events-modal-container")
-      .classList.remove(buttonId);
+      .classList.remove("showEvents");
     console.log("modal closed");
   }, 200);
 }
