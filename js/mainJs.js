@@ -24,6 +24,20 @@ window.currentMonthEvents = [];
 
 // Function Utilities
 
+compare = function (a, b) {
+  if (parseInt(a.day) < parseInt(b.day)) {
+    return -1;
+  }
+  if (parseInt(a.day) > parseInt(b.day)) {
+    return 1;
+  }
+  return 0;
+};
+
+orderCurrentMonthEvents = function (currentMonthEvents) {
+  currentMonthEvents.sort(compare);
+};
+
 clearVariables = function () {
   currentMonthEvents = [];
 
@@ -36,6 +50,8 @@ clearVariables = function () {
   endDatetimePickerInput.value = null;
   eventNoteInput = document.getElementById("event-note");
   eventNoteInput.value = " ";
+  eventColorInput = document.getElementById("color-1");
+  eventColorInput.checked = true;
   newEvent = {};
 };
 getDayString = function (day) {
@@ -171,7 +187,12 @@ function writeCalendar() {
         "calendar-table__col calendar-table__today";
     }
 
+    // write list of upcoming events shown at the bottom of the calendar
+    upcomingEventsList = document.getElementById("upcoming-events-list");
+    upcomingEventsList.innerHTML = "";
+
     currentMonthEvents.forEach((e) => {
+      // add color on day number and event listener
       if (e.day == dateNumber) {
         e.events.forEach((event) => {
           dayId = "d" + i;
@@ -184,6 +205,57 @@ function writeCalendar() {
           });
 
           console.log(event);
+        });
+      }
+
+      //write list at bottom of calendar only for events after today
+      if (e.day >= today.getDate()) {
+        e.events.forEach((event) => {
+          //data processing
+          humanStartDate = convertDatetimeToHuman(
+            event.startDate.toDate().toString()
+          );
+          humanEndDate = convertDatetimeToHuman(
+            event.endDate.toDate().toString()
+          );
+
+          startHours = humanStartDate.hours.toLocaleString("en-US", {
+            minimumIntegerDigits: 2,
+            useGrouping: false,
+          });
+          endHours = humanEndDate.hours.toLocaleString("en-US", {
+            minimumIntegerDigits: 2,
+            useGrouping: false,
+          });
+          startMinutes = humanStartDate.minutes.toLocaleString("en-US", {
+            minimumIntegerDigits: 2,
+            useGrouping: false,
+          });
+          endMinutes = humanEndDate.minutes.toLocaleString("en-US", {
+            minimumIntegerDigits: 2,
+            useGrouping: false,
+          });
+
+          // update upcoming events list
+          upcomingEventsList.innerHTML =
+            upcomingEventsList.innerHTML +
+            `<li class="events__item-${event.color}">
+              <div class="events__item--left">
+                <span class="events__name">${event.name}</span>
+                <span class="events__date">${
+                  humanStartDate.month.slice(0, 3) +
+                  " " +
+                  humanStartDate.day +
+                  "  to  " +
+                  humanEndDate.month.slice(0, 3) +
+                  " " +
+                  humanEndDate.day
+                }</span>
+                <br/>
+                <span class="events__date">${event.note}</span>
+              </div>
+              <span class="events__tag">${startHours}:${startMinutes}  ${endHours}:${endMinutes}</span>
+            </li>`;
         });
       }
     });
@@ -243,6 +315,7 @@ function refreshCalendar() {
           data = doc.data();
           element = { day: doc.id, ...data };
           currentMonthEvents.push(element);
+          orderCurrentMonthEvents(currentMonthEvents);
         });
       } else {
         currentMonthEvents = [];
@@ -269,7 +342,7 @@ window.onload = function () {
 };
 
 // Add new event
-function updateEventData() {}
+function updateEventData() {} //TBD
 
 function addNewEvent() {
   // check variables
@@ -494,7 +567,7 @@ function showDayEventsBtn(i) {
           useGrouping: false,
         });
 
-        // update list
+        // update day list
         list.innerHTML =
           list.innerHTML +
           `<button onclick="removeListEvents(humanStartDate.day, humanStartDate.month, humanStartDate.year, event )" style="transform: translate(-15px,-10px) scale(1.5); float: right;" > <ion-icon name="close-circle"></ion-icon> </button>
